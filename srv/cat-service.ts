@@ -7,8 +7,10 @@ module.exports = class CatalogService extends cds.ApplicationService { async ini
     })
 
     this.before('CREATE', Order, async(req) => {
+        console.log('Create Order called')
         //calculate amount
-        const { price } = await SELECT (Books, b=> {b.price}) .where `ID = ${req.data.book_ID}`
+        const { price } = await SELECT .one (Books, b => {b.price}) .where `ID = ${req.data.book_ID}`
+        console.log('price: ', price)
         req.data.amount = req.data.quantity * price
     })
 

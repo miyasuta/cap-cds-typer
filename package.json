@@ -7,17 +7,34 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^7",
-    "express": "^4"
+    "express": "^4",
+    "@sap/cds-hana": "^2",
+    "@sap/xssec": "^3",
+    "passport": "^0"
   },
   "devDependencies": {
     "@cap-js/cds-typer": ">=0.1",
     "@cap-js/sqlite": "^1",
-    "@types/node": "^20.10.4"
+    "@sap/cds-dk": "^7",
+    "@types/node": "^20.10.4",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
+    "build:ts": "tsc",
+    "build:cds": "cds build --production",
+    "cleanup:ts": "npx rimraf gen/srv/srv/*.ts"
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "db": "hana",
+        "auth": "xsuaa"
+      }
+    }
   }
 }

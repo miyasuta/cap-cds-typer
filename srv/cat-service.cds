@@ -53,4 +53,6 @@ annotate CatalogService.Orders with @(
         ],
     }
 
-)
+){
+    amount @Common : { FieldControl : #ReadOnly, }
+};
