@@ -25,6 +25,7 @@ modules:
     requires:
       - name: capts-auth
       - name: capts-db
+      - name: capts-appllog
 
   - name: capts
     type: approuter.nodejs
@@ -41,6 +42,7 @@ modules:
           url: ~{srv-url}
           forwardAuthToken: true
       - name: capts-auth
+      - name: capts-appllog
 
   - name: capts-db-deployer
     type: hdb
@@ -65,3 +67,9 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+
+  - name: capts-appllog
+    type: org.cloudfoundry.managed-service   
+    parameters:
+      service: application-logs 
+      service-plan: lite        
