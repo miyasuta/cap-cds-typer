@@ -1,42 +1,51 @@
 {
-  "name": "capts",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^7",
-    "express": "^4",
-    "@sap/cds-hana": "^2",
-    "@sap/xssec": "^3",
-    "passport": "^0"
-  },
-  "devDependencies": {
-    "@cap-js/cds-typer": ">=0.1",
-    "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^7",
-    "@types/node": "^20.10.4",
-    "rimraf": "^5.0.5"
-  },
-  "scripts": {
-    "start": "cds-serve",
-    "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
-    "build:ts": "tsc",
-    "build:cds": "cds build --production",
-    "cleanup:ts": "npx rimraf gen/srv/srv/*.ts",
-    "deploy": "cf deploy gen/mta.tar",
-    "build": "mbt build -t gen --mtar mta.tar"
-  },
-  "imports": {
-    "#cds-models/*": "./@cds-models/*/index.js"
-  },
-  "cds": {
-    "requires": {
-      "[production]": {
-        "db": "hana",
-        "auth": "xsuaa"
-      }
-    }
-  }
+    "name": "capts",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^7",
+        "express": "^4",
+        "@sap/cds-hana": "^2",
+        "@sap/xssec": "^3",
+        "passport": "^0"
+    },
+    "devDependencies": {
+        "@cap-js/cds-typer": ">=0.1",
+        "@cap-js/sqlite": "^1",
+        "@sap/cds-dk": "^7",
+        "@types/node": "^20.10.4",
+        "rimraf": "^5.0.5",
+        "cds-plugin-ui5": "^0.6.13"
+    },
+    "scripts": {
+        "start": "cds-serve",
+        "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
+        "build:ts": "tsc",
+        "build:cds": "cds build --production",
+        "cleanup:ts": "npx rimraf gen/srv/srv/*.ts",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "watch-ordersui": "cds watch --open miyasuta.ordersui/index.html?sap-ui-xx-viewCache=false --livereload false",
+        "undeploy": "cf undeploy capts --delete-services --delete-service-keys --delete-service-brokers"
+    },
+    "imports": {
+        "#cds-models/*": "./@cds-models/*/index.js"
+    },
+    "cds": {
+        "requires": {
+            "[production]": {
+                "db": "hana",
+                "auth": "xsuaa"
+            }
+        }
+    },
+    "workspaces": [
+        "app/*"
+    ],
+    "sapux": [
+        "app/ordersui"
+    ]
 }

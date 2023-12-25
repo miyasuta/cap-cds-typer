@@ -10,7 +10,7 @@ entity Books {
 //追加
 entity Orders {
   key ID: UUID @title: 'Order ID';
-  book: Association to Books;
+  book: Association to Books @title: 'Book ID';
   quantity: Integer @title: 'Quantity';
   amount: Integer @title: 'Amount';
 }
