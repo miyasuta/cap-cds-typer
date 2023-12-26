@@ -1,9 +1,9 @@
 import ControllerExtension from 'sap/ui/core/mvc/ControllerExtension';
 import ExtensionAPI from 'sap/fe/templates/ObjectPage/ExtensionAPI';
 import Dialog from 'sap/m/Dialog';
-import DialogType from 'sap/fe/test/api/DialogType';
 import Button from 'sap/m/Button';
-import ButtonType from 'sap/m/ButtonType';
+import Text from 'sap/m/Text';
+import { ButtonType, DialogType } from 'sap/m/library';
 
 /**
  * @namespace miyasuta.ordersui.ext.controller.ObjectPageExt
@@ -23,21 +23,38 @@ export default class ObjectPageExt extends ControllerExtension<ExtensionAPI> {
 
 		editFlow: {
 			onBeforeDelete(mParameters: object) {
-				
+				return createDialog("Do you wan to delete this object?")
 			}
 		}
 	}
+}
 
-	private async createDialog(message: string): Promise <void> {
-		return new Promise((resoleve, reject)=> {
-			// const approveDialog = new Dialog({
-			// 	type: DialogType.Message,
-			// 	title: "Confirm",
-			// 	content: new Text({text: message}),
-			// 	beginButton: new Button({
-			// 		type: ButtonType.
-			// 	})
-			// })
+async function createDialog(sText: string): Promise<void> {
+	return new Promise<void>((resolve, reject)=> {
+		const oApproveDialog = new Dialog({
+			type: DialogType.Message,
+			title: "Confirm",
+			content: new Text({text: sText}),
+			beginButton: new Button({
+				type: ButtonType.Emphasized,
+				text: "Continue",
+				press: () => {
+					oApproveDialog.close()
+					resolve()
+				}
+			}),
+			endButton: new Button({
+				text: "Cancel",
+				press: () => {
+					oApproveDialog.close()
+					reject()
+				}
+			}),
+			escapeHandler: (pCloseDialog) => {
+				pCloseDialog.resolve()
+				reject()
+			}
 		})
-	}
+		oApproveDialog.open()
+	})
 }
